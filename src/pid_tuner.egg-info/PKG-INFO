@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: pid-tuner
+Version: 0.1.0
+Summary: FPC PID Tuner CLI tools
+Author: bMagSquatch
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Requires-Dist: typer
+Requires-Dist: click
+Requires-Dist: shellingham
+Requires-Dist: rich
