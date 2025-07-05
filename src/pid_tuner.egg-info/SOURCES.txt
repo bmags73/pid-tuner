@@ -2,6 +2,7 @@ LICENSE
 README.md
 pyproject.toml
 src/pid_tuner/cli.py
+src/pid_tuner/compare.py
 src/pid_tuner/parser.py
 src/pid_tuner/plotter.py
 src/pid_tuner/stats.py

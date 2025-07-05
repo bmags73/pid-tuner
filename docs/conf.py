@@ -5,12 +5,6 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('..'))
 
-# -- Project information -----------------------------------------------------
-
-project   = "PID Tuner CLI"
-author    = "bMagSquatch"
-release   = "0.1.0"
-
 # -- General configuration ---------------------------------------------------
 
 extensions = [
@@ -18,6 +12,12 @@ extensions = [
     "mkdocstrings",
     # any other Sphinx extensions…
 ]
+
+# -- Project information -----------------------------------------------------
+
+project   = "PID Tuner CLI"
+author    = "bMagSquatch"
+release   = "0.1.0"
 
 templates_path = ["_templates"]
 exclude_patterns = []
