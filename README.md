@@ -1,105 +1,135 @@
-# PID Tuner CLI
+# pid-tuner
 
-A command-line toolkit for FPV drone PID analysis, including plotting gyro vs. PID, detecting D-term spikes, and browsing spike data.
+> 🛠️ **FPV PID Tuner** — A professional CLI toolkit for analyzing and tuning PID on FPV drones. Plot gyro vs. PID outputs, zoom in on D‑term spikes, compare flight logs, and get data‑driven tuning suggestions.
 
-## 🚀 Installation
+[![PyPI Version](https://img.shields.io/pypi/v/pid-tuner)](https://pypi.org/project/pid-tuner)
+[![Python](https://img.shields.io/pypi/pyversions/pid-tuner)](https://pypi.org/project/pid-tuner)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Build Status](https://github.com/bmags73/pid-tuner/actions/workflows/ci.yml/badge.svg)](https://github.com/bmags73/pid-tuner/actions)
 
-Install into your (virtual) environment:
+---
+
+## 🔍 Features
+
+* **Summary**: runtime, total spikes, spike rate, avg & max |D‑term|, and avg throttle at spike times.
+* **Plot**: gyro vs. PID output curves; zoomed views of D‑term spikes; optional throttle overlay.
+* **Spikes**: detect, filter, page through spike events; export CSVs for detailed analysis.
+* **Future**: compare multiple logs side‑by‑side; automated tuning recommendations; Betaflight integration.
+
+---
+
+## 1. Installation
+
+**Requires:** Python 3.8+.
+
+### From PyPI
 
 ```bash
-# Clone this repo and enter its directory
-git clone https://github.com/yourusername/pid_tuner.git
-cd pid_tuner
-
-# Activate your venv if not already active
-source .venv/bin/activate  # or your shell’s activate script
-
-# Install in editable mode (for development):
-pip install -e .
-
-# Or install from PyPI:
 pip install pid-tuner
 ```
 
-## 📦 Package Structure
-
-```
-src/pid_tuner/
-├── __init__.py       # Package entry point
-├── cli.py            # Typer app with subcommands: summary, plot, spikes
-├── parser.py         # load_log()
-├── plotter.py        # plotting and detect_spikes()
-└── stats.py          # (optional) summary logic
-```
-
-## 📖 Usage Examples
-
-### 1️⃣ Summary of PID Spikes
-
-Show runtime, total spikes, rate, D-term stats, and average throttle:
+### From Source (editable)
 
 ```bash
-pid-tuner summary --axes roll,pitch --window 50 --threshold 2.0
+git clone git@github.com:bmags73/pid-tuner.git
+cd pid-tuner
+pip install -e .
 ```
 
-### 2️⃣ Generate Plots
+---
 
-Save gyro vs PID and zoomed D-term spikes (with optional throttle overlay):
+## 2. Quickstart Guide
+
+Place your Blackbox CSV logs in any folder and run commands against them:
+
+### a) Summary of PID Spikes
 
 ```bash
-pid-tuner plot --axes roll,pitch --overlay-throttle --out-dir graphs
+pid-tuner summary \
+  --log logs/sample1.csv \
+  --axes roll,pitch \
+  --window 50 \
+  --threshold 2.0
 ```
 
-### 3️⃣ Browse Spike Details
-
-Detect D-term spikes, save CSVs, then page through spike events:
+### b) Generate Plots
 
 ```bash
-pid-tuner spikes --axes roll,pitch --min-mag 50 --time-window 1,3 --page 1 --per-page 10
+pid-tuner plot \
+  --axes roll,pitch,yaw \
+  --overlay-throttle \
+  --out-dir graphs/
 ```
 
-## 🛠️ API Reference
+### c) Browse Spike Details
 
-You can generate an API reference from the built-in docstrings using Sphinx or MkDocs with mkdocstrings. Here's a quick Sphinx setup:
+```bash
+pid-tuner spikes \
+  --axes roll,pitch \
+  --min-mag 30 \
+  --time-window 0.5,2.0 \
+  --page 1 \
+  --per-page 20
+```
 
-1. Install docs dependencies:
+---
 
-   ```bash
-   pip install sphinx mkdocstrings
-   ```
-2. In your project root, run:
+## 3. Advanced Usage
 
-   ```bash
-   sphinx-quickstart docs
-   ```
-3. Edit `docs/conf.py`:
+### 3.1 Batch Processing Multiple Logs
 
-   ```python
-   extensions = ['mkdocstrings']
-   templates_path = ['_templates']
-   ```
-4. In `docs/index.rst`, add:
+You can quickly analyze a whole directory of Blackbox CSVs with a simple shell loop:
 
-   ```rst
-   .. toctree::
-      :maxdepth: 2
-      :caption: Contents:
+```bash
+for log in logs/*.csv; do
+  echo "Processing $log"
+  pid-tuner summary --log "$log" --axes roll,pitch,yaw --window 50 --threshold 2.0
+  pid-tuner plot    --log "$log" --axes roll,pitch,yaw --out-dir graphs/
+  pid-tuner spikes  --log "$log" --axes roll,pitch,yaw --min-mag 30 --time-window 0.5,2.0
+done
+```
 
-      api
-   ```
-5. Create `docs/api.rst`:
+### 3.2 Configuration File Support (Upcoming)
 
-   ```rst
-   PID Tuner API
-   =============
+Define your analysis parameters in `config.yml` or `config.json` to run as:
 
-   .. mdinclude:: ../src/pid_tuner/cli.py
-      :language: python
-   ```
-6. Build HTML:
+```bash
+pid-tuner batch --config config.yml
+```
 
-   ```bash
-   sphinx-build docs docs/_build/html
-   ```
+```yaml
+# config.yml
+logs:
+  - logs/flight1.csv
+  - logs/flight2.csv
+axes: [roll, pitch, yaw]
+threshold: 2.5
+window: 60
+out_dir: graphs/
+```
 
-Now open `docs/_build/html/index.html` for the full API.
+*(This feature is under development — contributions welcome!)*## 4. Contribution & API Reference
+
+### API Docs
+
+Generate API reference with Sphinx + mkdocstrings:
+
+```bash
+pip install sphinx mkdocstrings
+sphinx-quickstart docs
+# update docs/conf.py and index.rst as needed
+sphinx-build docs docs/_build/html
+```
+
+### Contributing
+
+* Fork the repo and create feature branches.
+* Run `pytest` to ensure all tests pass.
+* Update/add docstrings and tests for new features.
+* Submit a Pull Request with clear description and screenshots.
+
+---
+
+## 5. License
+
+MIT © [bMagSquatch](https://github.com/bmags73)

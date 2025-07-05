@@ -5,7 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pid-tuner"
 version = "0.1.0"
-description = "FPC PID Tuner CLI tools"
+description = "FPV PID Tuner CLI tools"
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["fpv", "drone", "pid", "analysis"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
 authors = [{ name = "bMagSquatch" }]
 dependencies = [
   "pandas",
@@ -15,6 +23,10 @@ dependencies = [
   "shellingham",  # for "typer install-completion"
   "rich",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/bmags73/pid-tuner"
+"Repository" = "https://github.com/bmags73/pid-tuner"
 
 [project.scripts]
 pid-tuner = "pid_tuner.cli:app"

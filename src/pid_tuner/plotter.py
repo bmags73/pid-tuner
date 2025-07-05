@@ -10,7 +10,7 @@ def detect_spikes(
     ):
 
     """
-    Return a DataFrame of all D-term spikes for teh given axis.
+    Return a DataFrame of all D-term spikes for the given axis.
     Each row has: axis, time_us, d_value (D-term), std_value (rolling std).
     """
     axis_map = {'roll': 0, 'pitch': 1, 'yaw': 2}

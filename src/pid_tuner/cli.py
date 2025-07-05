@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
+import os
 import typer
+from typing import List
+
 from .parser import load_log
 from .plotter import plot_pid_vs_gyro, plot_dterm_spikes, detect_spikes
 from .stats import spike_summary
@@ -29,6 +32,7 @@ def summary(
         help="Spike threshold as N×σ of the rolling std"
     ),
 ):
+    spike_summary(log=log, axes=axes, window=window, threshod=threshold)
     """
     Show high-level stats: runtime, number of spikes, spike rate,
     average & max |D-term|, and average throttle at spike times.
